@@ -1,6 +1,6 @@
-## Getting Started
+## 开始
 
-### What is Mithril?
+### Mithril 是什么？
 
 Mithril is a client-side Javascript MVC framework, i.e. it's a tool to make application code divided into a data layer (called **M**odel), a UI layer (called **V**iew), and a glue layer (called **C**ontroller)
 
@@ -18,7 +18,7 @@ However, using its entire toolset idiomatically can bring lots of benefits: lear
 
 Once you have a [copy of Mithril](installation.md), getting started is surprisingly boilerplate-free:
 
-```markup
+```html
 <!doctype html>
 <title>Todo app</title>
 <script src="mithril.min.js"></script>
@@ -39,7 +39,7 @@ For simplicity, our application will have only one component, and we're going to
 
 In Mithril, a *component* is an object that contains a `view` function and optionally a `controller` function.
 
-```
+```javascript
 //an empty Mithril component
 var myComponent = {
 	controller: function() {},
@@ -51,7 +51,7 @@ In addition to holding a controller and a view, a component can also be used to 
 
 Let's create a component.
 
-```markup
+```html
 <script>
 //this application only has one component: todo
 var todo = {};
@@ -226,7 +226,7 @@ Notice that we pass a root DOM element to attach our template to, as well as the
 
 This renders the following markup:
 
-```markup
+```html
 <html>
 	<body>
 		<input />
@@ -341,7 +341,7 @@ The difference with the modified version is that `add` no longer takes an argume
 
 With this, we can make the `onclick` binding on the template *much* simpler:
 
-```
+```javascript
 m("button", {onclick: todo.vm.add}, "Add")
 ```
 
@@ -425,7 +425,7 @@ You can learn more about how redrawing heuristics work [here](auto-redrawing.md)
 
 Here's the application code in its entirety:
 
-```markup
+```html
 <!doctype html>
 <script src="mithril.min.js"></script>
 <script>
