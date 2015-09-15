@@ -1,134 +1,120 @@
-## Installation
+## 安装
 
-Mithril is available from a variety of sources:
+Mithril 有多种安装方式
 
----
+### 直接下载
 
-### Direct download
+直接在 github 下载[ zip 格式的最新版本](http://lhorie.github.io/mithril/mithril.min.zip)。
 
-You can [download a zip of the latest version version here](http://lhorie.github.io/mithril/mithril.min.zip).
+旧版本的链接可以在[更新日志](change-log.md)中找到。
 
-Links to older versions can be found in the [change log](change-log.html).
+使用 Mithril 时，需要从 zip 压缩包里面提取出 `.js` 文件：
 
-In order to use Mithril, extract it from the zip file and point a script tag to the `.js` file:
-
-```markup
+```html
 <script src="mithril.min.js"></script>
 ```
 
-Note that in order to support older versions of IE, you need to include [some shims](tools.md#internet-explorer-compatibility).
+注意：为了在低版本的 IE 上使用 Mithril，你需要 [shim 兼容库](tools.md#internet-explorer-compatibility).
 
----
+### CDN（内容分发网络）
 
-### CDNs (Content Delivery Networks)
+你也可以通过CDN 使用 Mithril，比如 [cdnjs](http://cdnjs.com/libraries/mithril/) 或 [jsDelivr](http://www.jsdelivr.com/#!mithril)。
 
-You can also find Mithril in [cdnjs](http://cdnjs.com/libraries/mithril/) and [jsDelivr](http://www.jsdelivr.com/#!mithril).
-
-Content delivery networks allow the library to be cached across different websites that use the same version of the framework, and help reduce latency by serving the files from a server that is physically near the user's location.
+CDN 允许用户端缓存相同版本的框架，即使这些框架被不同的网站使用。通过把 JS 库缓存到距离用户最近的服务器上，以提升性能。
 
 #### cdnjs
 
-```markup
+```html
 <script src="//cdnjs.cloudflare.com/ajax/libs/mithril/$version/mithril.min.js"></script>
 ```
 
 #### jsDelivr
 
-```markup
+```html
 <script src="//cdn.jsdelivr.net/mithril/$version/mithril.min.js"></script>
 ```
 
----
-
 ### NPM
 
-NPM is the default package manager for [NodeJS](http://nodejs.org/). If you're using NodeJS already or planning on using [Grunt](http://gruntjs.com/) to create a build system, you can use NPM to conveniently keep up-to-date with Mithril versions.
+NPM 是 [NodeJS](http://nodejs.org/) 的默认包管理器。如果你曾经使用过 NodeJS，或者打算使用 [Grunt](http://gruntjs.com/) 构建系统，你可以很方便的使用 NPM 得到 Mithril 的最新版。
 
-Assuming you have NodeJS installed,  you can download Mithril by typing this:
+一旦你安装了 NodeJS，你可以使用如下命令下载 Mithril 的最新版：
 
 ```
 npm install mithril
 ```
 
-Then, to use Mithril, point a script tag to the downloaded file:
+然后，在 `script` 标签中插入下载的 js 文件：
 
-```markup
+```html
 <script src="/node_modules/mithril/mithril.min.js"></script>
 ```
 
----
-
 ### Bower
 
-[Bower](http://bower.io) is a frontend package manager built in [NodeJS](http://nodejs.org/). If you're using NodeJS already or planning on using [Grunt](http://gruntjs.com/) to create a build system, you can use Bower to conveniently keep up-to-date with Mithril versions.
+[Bower](http://bower.io) 是 [NodeJS](http://nodejs.org/) 的前端包管理器。如果你曾经使用过 NodeJS，或者打算使用 [Grunt](http://gruntjs.com/) 构建系统，你可以很方便的使用 NPM 得到 Mithril 的最新版。
 
-Assuming you have NodeJS installed, you can install Bower by typing this in the command line:
+一旦你安装了 NodeJS，你可以使用如下命令安装 Bower：
 
 ```
 npm install -g bower
 ```
 
-And you can download Mithril by typing this:
+再输入以下命令下载 Mithril：
 
 ```
 bower install mithril
 ```
 
-Then, to use Mithril, point a script tag to the downloaded file:
+然后，在 `script` 标签中插入下载的 js 文件：
 
-```markup
+```html
 <script src="/bower_components/mithril/mithril.min.js"></script>
 ```
 
----
-
 ### Component
 
-[Component](http://component.github.io) is another package manager for [NodeJS](http://nodejs.org/). If you're using NodeJS already or planning on using [Grunt](http://gruntjs.com/) to create a build system, you can use Component to conveniently keep up-to-date with Mithril versions.
+[Component](http://component.github.io) 是 [NodeJS](http://nodejs.org/) 的另一个包管理器。如果你曾经使用过 NodeJS，或者打算使用 [Grunt](http://gruntjs.com/) 构建系统，你可以很方便的使用 NPM 得到 Mithril 的最新版。
 
-Assuming you have NodeJS installed, you can install Component by typing this in the command line:
+一旦你安装了 NodeJS，你可以使用如下命令安装 Component：
 
 ```
 npm install -g component
 ```
 
-And you can download Mithril by typing this:
+再输入以下命令下载 Mithril：
 
 ```
 component install lhorie/mithril
 ```
 
-Then, to use Mithril, point a script tag to the downloaded file:
+然后，在 `script` 标签中插入下载的 js 文件：
 
-```markup
+```html
 <script src="/components/lhorie/mithril/master/mithril.js"></script>
 ```
 
----
-
 ### Rails
 
-Jordan Humphreys created a gem to allow integration with Rails:
+Jordan Humphreys 创建了一个 gem，用来在 Rails 上集成 Mithril
 
 [Mithril-Rails](https://github.com/mrsweaters/mithril-rails)
 
-It includes support for the [MSX](https://github.com/insin/msx) HTML templating syntax from Jonathan Buchanan.
-
----
+他支持 Jonathan Buchanan 创建 [MSX](https://github.com/insin/msx) HTML 模板语法。
 
 ### Github
 
-You can also fork the latest stable project [directly from Github](https://github.com/lhorie/mithril).
+你也可以从 Github 上 fork 项目的[最终版本](https://github.com/lhorie/mithril)。
 
-If you want to use the bleeding edge version, you can [fork the development repository](https://github.com/lhorie/mithril.js).
+如果你想使用前沿版本，你可以 fork [development 分支](https://github.com/lhorie/mithril.js)。
 
-Be aware that even though Mithril has tests running in a continuous integration environment, the bleeding edge version might occasionally break. If you're interested in helping improve Mithril, you're welcome to use the bleeding edge version and report any bugs that you find.
+注意，Mithril 的测试运行在一个持续集成环境中，前沿版本可能偶尔通不过测试。如果你有兴趣帮我们改善 Mithril，欢迎你使用前沿版本并报告任何你发现的 bug。
 
-In order to update a forked version of Mithril, [follow the instructions on this page](https://help.github.com/articles/syncing-a-fork).
+为了更好的更新 Mithril 的分支版本，阅读[这篇文章](https://help.github.com/articles/syncing-a-fork)。
 
-#### Using bleeding edge from NPM
+#### 通过 NPM 使用前沿版本
 
-To use the bleeding edge version from npm, use the following command:
+从 npm 使用前沿版本，使用以下命令：
 
 ```
 npm install git://github.com/lhorie/mithril.js#next --save
