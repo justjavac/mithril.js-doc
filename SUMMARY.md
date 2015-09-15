@@ -15,8 +15,3 @@
     * [基准测试](content/benchmarks.md)
     * [最佳实践](content/practices.md)
     * [工具](content/tools.md)
-* [API](content/api.md)
-    * [从其他MVC框架的差异](content/comparison.md)
-    * [基准测试](content/benchmarks.md)
-    * [最佳实践](content/practices.md)
-    * [工具](content/tools.md)
