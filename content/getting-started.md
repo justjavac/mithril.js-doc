@@ -2,143 +2,142 @@
 
 ### Mithril 是什么？
 
-Mithril is a client-side Javascript MVC framework, i.e. it's a tool to make application code divided into a data layer (called **M**odel), a UI layer (called **V**iew), and a glue layer (called **C**ontroller)
+Mithril 是一个客户端 javascript MVC 框架，即它是一个工具，使应用程序代码分为数据层(**M**odel)， UI 层(**V**iew)，黏合层(**C**ontroller)。
 
-Mithril is around 8kb gzipped thanks to its [small, focused, API](mithril.md). It provides a templating engine with a virtual DOM diff implementation for performant rendering, utilities for high-level modelling via functional composition, as well as support for routing and componentization.
+Mithril 通过 gzip 压缩后，仅有 12kb 左右，这要归功于 [small, focused, API](mithril.md)。它提供了一个模板引擎与一个虚拟 DOM diff 实现高性能渲染，还提供了其它高级工具，以及支持路由和组件化。
 
-The goal of the framework is to make application code discoverable, readable and maintainable, and hopefully help you become an even better developer.
+框架的目标是使应用程序代码更容易组织，可读和可维护，帮助你成为一个更好的开发者。
 
-Unlike some frameworks, Mithril tries very hard to avoid locking you into a web of dependencies: you can use as *little* of the framework as you need.
+不像某些框架，Mithril 努力避免将您锁定到某个 web 框架上：您可以尽量**少**地使用您所需要的框架。
 
-However, using its entire toolset idiomatically can bring lots of benefits: learning to use functional programming in real world scenarios and solidifying good coding practices for OOP and MVC are just some of them.
+然而，使用其整个工具库可以带来很多好处：学习使用函数式编程和巩固良好的编码实践，OOP 和 MVC 只是其中的一些。
 
----
+## 一个简单的应用
 
-## A Simple Application
-
-Once you have a [copy of Mithril](installation.md), getting started is surprisingly boilerplate-free:
+一旦你安装了 [Mithril](installation.md)，那么开始写 Mighril 代码会让你感到惊讶：
 
 ```html
 <!doctype html>
 <title>Todo app</title>
 <script src="mithril.min.js"></script>
 <script>
-//app goes here
+// App 放在这里
 </script>
 ```
 
-Yes, this is valid HTML 5! According to the specs, the `<html>`, `<head>` and `<body>` tags can be omitted, but their respective DOM elements will still be there implicitly when a browser renders that markup.
+是的，这是一个有效的 HTML5! 根据规范，`<html>`，`<head>`，`<body>` 标签可以省略，但各自的 DOM 元素仍将作为一个标记碑浏览器隐式地渲染出来。
 
----
+### 模型（Model）
 
-### Model
+在 Mithril 中，应用程序通常在一个命名空间中，他包含了一些组件。组件代表了一个可视“页面”或页面的一部分。此外,应用程序可以组织分为三大层：模型、控制器和视图。
 
-In Mithril, an application typically lives in a namespace and contains components. Components are merely structures that represent a viewable "page" or a part of a page. In addition, an application can be organizationally divided into three major layers: Model, Controller and View.
+为简单起见，我们的应用程序将只有一个组件，我们将使用它作为应用程序的命名空间。
 
-For simplicity, our application will have only one component, and we're going to use it as the namespace for our application.
-
-In Mithril, a *component* is an object that contains a `view` function and optionally a `controller` function.
+在 Mithril 中，**组件**是一个对象，包含两个函数：`controller` 和 `view`。
 
 ```javascript
-//an empty Mithril component
+// 一个空的 Mithril 组件
 var myComponent = {
 	controller: function() {},
 	view: function() {}
 }
 ```
 
-In addition to holding a controller and a view, a component can also be used to store data that pertains to it.
+除了控制器和视图，组件也可以用来存储数据。
 
-Let's create a component.
+让我们创建一个组件。
 
 ```html
 <script>
-//this application only has one component: todo
+// 这个应用只有一个组件：todo
 var todo = {};
 </script>
 ```
 
 Typically, model entities are reusable and live outside of components (e.g. `var User = ...`). In our example, since the whole application lives in one component, we're going to use the component as a namespace for our model entities.
 
+通常，模型实体可以在组件之外重用（例如，`var User = ...`）。在我们的示例中，由于整个应用程序只有一个组件,我们将使用组件作为我们的模型实体的命名空间。
+
 ```javascript
 var todo = {};
 
-//for simplicity, we use this component to namespace the model classes
+// 为简单起见，我们使用这个组件作为模型的命名空间
 
-//the Todo class has two properties
+// Todo 类有 2 个属性
 todo.Todo = function(data) {
 	this.description = m.prop(data.description);
 	this.done = m.prop(false);
 };
 
-//the TodoList class is a list of Todo's
+// TodoList 类是 Todo 的列表
 todo.TodoList = Array;
 ```
 
-[`m.prop`](mithril.prop.md) is simply a factory for a getter-setter function. Getter-setters work like this:
+[`m.prop`](mithril.prop.md) 只是 getter-setter 函数的工厂。getter-setter 是这样工作的：
 
 ```javascript
-//define a getter-setter with initial value `John`
+// 定义一个 getter-setter，初始值为 `John`
 var a_name = m.prop("John");
 
-//read the value
+// 读，结果为 John
 var a = a_name(); //a == "John"
 
-//set the value to `Mary`
-a_name("Mary"); //Mary
+// 将 `Mary` 的值写入
+a_name("Mary"); // Mary
 
-//read the value
+// 读，结果为 Mary
 var b = a_name(); //b == "Mary"
 ```
 
-Note that the `Todo` and `TodoList` classes we defined above are plain vanilla Javascript constructors. They can be initialized and used like this:
+注意，`Todo` 和 `TodoList` 类是普通 javascript 构造函数。他们可以被初始化和使用：
 
 ```javascript
 var myTask = new todo.Todo({description: "Write code"});
 
-//read the description
-myTask.description(); //Write code
+// read the description
+myTask.description(); // Write code
 
-//is it done?
-var isDone = myTask.done(); //isDone == false
+// is it done?
+var isDone = myTask.done(); // isDone == false
 
-//mark as done
+// mark as done
 myTask.done(true); //true
 
-//now it's done
-isDone = myTask.done(); //isDone == true
+// now it's done
+isDone = myTask.done(); // isDone == true
 ```
 
-The `TodoList` class is simply an alias of the native `Array` class.
+`TodoList` 类是 javascript 原生 `Array` 类的别名。
 
 ```javascript
 var list = new todo.TodoList();
-list.length; //0
+list.length; // 0
 ```
 
-According to the classic definition of the MVC pattern, the model layer is responsible for data storage, state management and business logic.
+根据经典 MVC 模式的定义，模型层负责数据存储、状态管理和业务逻辑。
 
-You can see that our classes above fit the criteria: they have all the methods and properties that they need to be assembled into a meaningful state. A `Todo` can be instantiated, and have its properties changed. The list can have todo items added to it via the `push` method. And so on.
+通过上面的步骤你可以看到，我们的课程符合标准：他们的所有方法和属性需要组装成一个有意义的状态。一个 `Todo` 可以实例化，它的属性可以发生变化。可以通过 `push` 方法将代办事项添加到列表中。等等。
 
-#### View-Model
+#### 视图模型（View-Model）
 
-Our next step is to write a view-model that will use our model classes. A view-model is a model level entity that stores UI state. In many frameworks UI state is typically stored in a controller, but doing so makes the code harder to scale since controllers aren't designed to be data providers. In Mithril, UI state is understood to be model data, even though it doesn't necessarily map to a database ORM entity.
+我们的下一步是编写视图模型（VM），将使用我们的模型类（M）。视图模型（VM）是一个模型级别的实体，用来存储 UI 状态。 在许多框架中，UI 状态通常存储在控制器（C）中，但是这样做使代码难以扩展，因为控制器不是数据提供者。在 Mithril 中，UI 状态在模型数据中，尽管它不一定会通过 ORM 实体映射到数据库。
 
-View-models are also responsible for handling business logic that revolves around UI-specific restrictions. For example a form might have an input and a cancel button. In such a case, it's the view-model's responsibility to track the current state of the input vs the original state and to apply a cancellation, if required. In the event the form was saved, then view-model would delegate saving to a more appropriate ORM model entity.
+视图模型（VM）还负责处理 UI 上的业务逻辑。例如一个表单可能包含一个输入按钮和一个取消按钮。在这种情况下,视图模型（VM）的任务是跟踪当前的输入状态和原始状态，如果点击了取消按钮，则恢复到原始状态。当表单保存后，视图模型将委托更合适的 ORM 模型实体处理保存事件。
 
-In the case of our todo application, the view-model needs a few things: it needs to track a running list of todos and a field for adding new todos, and it needs to handle the logic of adding to the todo and the implications of this action of the UI.
+对于我们的 todo 应用程序，视图模型需要做：它需要跟踪待办事项列表，还需要一个字段用来添加新的待办事项，并且它还需要处理一些逻辑，包括添加待办事项以及响应 UI 的相应动作。
 
 ```javascript
-//define the view-model
+// 定义视图模型
 todo.vm = {
 	init: function() {
-		//a running list of todos
+		// 待办事项列表
 		todo.vm.list = new todo.TodoList();
 		
 		//a slot to store the name of a new todo before it is created
+        // 在新的任务创建之前，存储待办事项的名称
 		todo.vm.description = m.prop('');
 		
-		//adds a todo to the list, and clears the description field for user convenience
+        // 添加一个 todo 到列表中，并清空 description 字段
 		todo.vm.add = function(description) {
 			if (description()) {
 				todo.vm.list.push(new todo.Todo({description: description()}));
@@ -149,21 +148,21 @@ todo.vm = {
 };
 ```
 
-The code above defines a view-model object called `vm`. It is simply a javascript object that has an `init` function. This function initializes the `vm` object with three members: `list`, which is simply an array, `description`, which is an `m.prop` getter-setter function with an empty string as the initial value, and `add`, which is a method that adds a new Todo instance to `list` if an input description getter-setter is not an empty string.
+上述代码定义了一个视图模型对象 `vm`。它仅仅是一个 javascript 对象，包含 `init` 函数。该函数初始化 `vm` 对象的三个成员：`list`，这是一个数组；`description`，这是一个 `m.prop` 的 getter-setter 函数，以一个空字符串作为初始值；`add`，这是一个方法，当输入的参数 getter-setter 不为空时，将 Todo 实例添加到 `list` 上。
 
-Later in this guide, we'll pass the `description` property as the parameter to this function. When we get there, I'll explain why we're passing description as an argument instead of simply using OOP-style member association.
+在本指南的后面，我们将使用 `description` 属性作为函数的参数。当我们到达那里时，我将解释为什么我们将 description 作为参数，而不是仅仅使用 OOP 风格的成员属性。
 
-You can use the view-model like this:
+您可以这样使用视图模型：
 
 ```javascript
-//initialize our view-model
+// 初始化视图模型
 todo.vm.init();
 
 todo.vm.description(); //[empty string]
 
-//try adding a to-do
+// 添加一个待办事项
 todo.vm.add(todo.vm.description);
-todo.vm.list.length; //0, because you can't add a to-do with an empty description
+todo.vm.list.length; //0, 因为待办事项的 description 为空
 
 //add it properly
 todo.vm.description("Write code");
@@ -171,15 +170,13 @@ todo.vm.add(todo.vm.description);
 todo.vm.list.length; //1
 ```
 
----
+### 控制器（Controller）
 
-### Controller
+在经典 MVC 中，控制器的作用是在视图和模型层中分发 action。在传统的服务器端框架中，控制器层是最重要复杂的，由于 HTTP 是基于“请求-响应”的，因此框架抽象了这个过程，将控制器作为适配器层将 HTTP 请求转换为序列化数据，然后传递给 ORM 模型方法。
 
-In classic MVC, the role of the controller is to dispatch actions from the view to the model layer. In traditional server-side frameworks, the controller layer is of large significance because the nature of HTTP requests, responses and the framework abstractions that are exposed to developers require that the controller act as an adapter layer to transform the serialized data from HTTP requests to something that can be passed to ORM model methods.
+然而，在客户端 MVC 中，不存在这种情况，控制器可以是非常简单的。Mithril 的控制器可以精简到最低限度，这样他们只执行一个重要的角色：调用模型视图的功能。您可能还记得，模型负责封装业务逻辑，视图模型负责封装 UI 状态的逻辑，所以不需要具有抽象功能的控制器，我们现在需要的是连接模型和 UI。
 
-In client-side MVC, however, this dissonance doesn't exist, and controllers can be extremely simple. Mithril controllers can be stripped down to a bare minimum, so that they only perform a single essential role: to expose a scoped set of model-level functionality. As you may recall, models are responsible for encapsulating business logic, and view-models encapsulate logic that pertains specifically to UI state, so there's really nothing else for a controller to abstract away, and all it needs to do is expose a slice of the model layer that pertains to the UI that is currently in view.
-
-In other words, all our controller needs to do is this:
+换句话说，我们所有的控制器需要做的是：
 
 ```javascript
 todo.controller = function() {
@@ -187,11 +184,9 @@ todo.controller = function() {
 }
 ```
 
----
-
 ### View
 
-The next step is to write a view so users can interact with the application. In Mithril, views are plain Javascript. This comes with several benefits (proper error reporting, proper lexical scoping, etc.), while still allowing [HTML syntax to be used via a preprocessor tool](https://github.com/insin/msx)
+下一步是编写一个视图，这样用户就可以与应用程序交互。在 Mithril 中，视图是普通的 javascript 对象。这有几个好处（错误报告，作用域，等等），同时仍然允许[通过预处理工具使用 HTML 语法](https://github.com/insin/msx)。
 
 ```javascript
 todo.view = function() {
@@ -212,19 +207,19 @@ todo.view = function() {
 };
 ```
 
-The utility method `m()` creates virtual DOM elements. As you can see, you can use CSS selectors to specify attributes. You can also use the `.` syntax to add CSS classes and the `#` to add an id.
+工具方法 `m()` 创建虚拟的 DOM 元素。正如您可以看到的，您可以使用 CSS 选择器来指定属性。您还可以使用 `.` 添加 CSS 类和 `#` 添加一个 id。
 
-In fact, when not using the [MSX](https://github.com/insin/msx) HTML syntax preprocessor, it's recommended that you embrace using CSS selectors (e.g. `m(".modal-body")`) to really benefit from their inherent semantic expressiveness.
+事实上，当不使用 [MSX](https://github.com/insin/msx) HTML 语法预处理器时，建议您使用 CSS 选择（例如：`m(".modal-body")`），这样更符合真正的语义。
 
-For the purposes of testing out our code so far, the view can be rendered using the `m.render` method:
+渲染视图可以使用 `m.render` 方法：
 
 ```javascript
 m.render(document, todo.view());
 ```
 
-Notice that we pass a root DOM element to attach our template to, as well as the template itself.
+注意，我们将模板代码渲染到了根 DOM 元素，我们的模板自身也包括了根节点。
 
-This renders the following markup:
+以上代码的运行结果如下：
 
 ```html
 <html>
@@ -241,16 +236,14 @@ This renders the following markup:
 </html>
 ```
 
-Note that `m.render` is a very low level method in Mithril that draws only once and doesn't attempt to run the auto-redrawing system. In order to enable auto-redrawing, the `todo` component must be initialized by either calling `m.mount` or by creating a route definition with `m.route`. Also note that, unlike observable-based frameworks like Knockout.js, setting a value in a `m.prop` getter-setter does NOT trigger redrawing side-effects in Mithril.
+注意，`m.render` 是 Mithril 中非常低级别的方法，它只绘制一次，并不运行 auto-redrawing 系统。为了使用 auto-redrawing，`todo` 组件必须通过 `m.mount` 初始化或通过 `m.route` 创建一个路由。还要注意，不同于 Knockout.js 这种 observable-based 框架，使用 `m.prop` getter-setter 设置一个值时，**不**会触发 Mithril 的重绘。
 
----
+#### 数据绑定（Data Bindings）
 
-#### Data Bindings
-
-Let's implement a **data binding** on the text input. Data bindings connect a DOM element to a Javascript variable so that updating one updates the other.
+让我们在 text 输入框中实现一个**数据绑定**。数据绑定将 DOM 元素连接到一个 javascript 变量上，以便更新其中一个时，也可以更新另一个。
 
 ```javascript
-//binding a model value to an input in a template
+// 将模型的值绑定到 input 上
 m("input", {value: todo.vm.description()})
 ```
 
