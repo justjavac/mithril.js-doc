@@ -4,7 +4,7 @@
 
 If you already have your HTML written and want to convert it into a Mithril template, you can use the tool below for one-off manual conversion.
 
-[Template Converter](tools/template-converter.html)
+[Template Converter](http://mithril.js.org/tools/template-converter.html)
 
 ---
 
@@ -61,13 +61,13 @@ Mithril relies on some ECMAScript 5 features, namely: `Array::indexOf`, `Array::
 
 The easiest way to polyfill these features is to include this script:
 
-```javascript
+```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.3/es5-shim.min.js"></script>
 ```
 
 This will provide all the polyfills required for the browser. You can alternatively include only specific polyfills:
 
-```markup
+```html
 <script src="http://cdn.polyfill.io/v1/polyfill.min.js?features=Array.prototype.indexOf,Object.keys,Function.prototype.bind,Array.prototype.forEach,JSON"></script>
 ```
 

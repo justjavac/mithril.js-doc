@@ -52,7 +52,7 @@ m.route(document.body, "/dashboard/johndoe", {
 
 This redirects to the URL `http://server/#/dashboard/johndoe` and yields:
 
-```markup
+```html
 <body>johndoe</body>
 ```
 

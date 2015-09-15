@@ -50,7 +50,7 @@ For each `m.startComputation` call a library makes, it MUST also make one and ON
 
 If you want to a recurring callback (such as `setInterval` or a web socket event handler) to trigger redraws, you should call `m.startComputation` at the beginning of the function, not outside of it.
 
-```
+```javascript
 setInterval(function() {
 	m.startComputation(); //call before everything else in the event handler
 	
