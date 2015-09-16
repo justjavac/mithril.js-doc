@@ -247,29 +247,29 @@ m.render(document, todo.view());
 m("input", {value: todo.vm.description()})
 ```
 
-This binds the `description` getter-setter to the text input. Updating the value of the description in the model updates the DOM input when Mithril redraws.
+以上代码将 `description` 绑定到文本输入框上。更新模型中 description 的值，当 Mithril 重绘时，DOM 的值也会更新。
 
 ```javascript
 todo.vm.init();
 
-todo.vm.description(); // empty string
+todo.vm.description(); // 空字符串
 m.render(document, todo.view()); // input is blank
 
 todo.vm.description("Write code"); //set the description in the controller
 m.render(document, todo.view()); // input now says "Write code"
 ```
 
-At a glance it may seem like we're doing something very expensive by redrawing, but as it turns out, calling the `todo.view` method multiple times does not actually re-render the entire template. Internally, Mithril keeps a virtual representation of the DOM in cache, scans for changes, and then only modifies the absolute minimum required to apply the change to the DOM. In practice, this results in surprisingly fast re-rendering.
+乍一看似乎我们做了一些非常昂贵的操作——重绘，但事实证明，多次调用 `todo.view` 方法其实并没有多次重新渲染整个模板。Mithril 又一个虚拟 DOM 的缓存，当扫描到系统有更改时，只修改所需要的最小变化应用，然后应用到 DOM 上。在实践中，这将大大提升重绘的效率。
 
-In the case above, Mithril only touches the `value` attribute of the input.
+在上面的案例中，Mithril 只操作了文本框的 `value` 属性 。
 
-Note that the example above only *sets* the value of the input element in the DOM, but it never *reads* it. This means that typing something on the input and then re-rendering will clobber the text on screen.
+注意，上面的例子只是**设置**了 DOM 的 input 元素的值，但没有**读取**它。这意味着我们在文本框中输入值时，当系统重绘时并不会把这个值显示在屏幕上。
 
 ---
 
-Fortunately, bindings can also be **bi-directional**: that is, they can be coded in such a way that, in addition to setting the DOM value, it's also possible to read it as a user types, and then update the `description` getter-setter in the view-model.
+幸运的是，绑定也可以**双向**：也就是说，我们可以通过编码的方式，除了设置 DOM 值外，还把这个值读取到一个用户自定义类型中，然后更新 视图模型（VM）的 `description` getter-setter。
 
-Here's the most basic way of implementing the view-to-model part of the binding:
+这是最基本的方式实现视图到模型的绑定：
 
 ```javascript
 m("input", {onchange: m.withAttr("value", todo.vm.description), value: todo.vm.description()})
