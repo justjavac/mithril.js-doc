@@ -4,22 +4,7 @@
 
 Mithril 是一个轻量级客户端 JavaScript MVC 框架。
 
-### 轻量级
-
-- gzip 压缩后仅仅 12kb，无依赖
-- 非常少的 API，非常容易的学习曲线
-
-### 鲁棒性
-
-- 默认安全的模板
-- 层次化的MVC组件（hierarchical）
-
-### 快速
-
-- 虚拟 DOM 和编译模板
-- 智能的重绘系统（redrawing）
-
-[开始阅读](http://justjavac.gitbooks.io/mithriljs/content/)
+[开始使用](https://justjavac.gitbooks.io/mithriljs/content/content/getting-started.html)
 
 ## Github
 
