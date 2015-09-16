@@ -1,22 +1,20 @@
-## Routing
+## 路由
 
-Routing is a system that allows creating Single-Page-Applications (SPA), i.e. applications that can go from one page to another without causing a full browser refresh.
+路由使我们可以创建单页应用（SPA），即可以从一个页面跳转到另一个页面，而不会不需要刷新浏览器。
 
-It enables seamless navigability while preserving the ability to bookmark each page individually, and the ability to navigate the application via the browser's history mechanism.
+它使我们可以使用导航功能无缝的切换页面，同时可以为每个单独页面添加到收藏夹里，并且能够使用浏览器的历史记录功能。
 
-Mithril provides utilities to handle three different aspect of routing:
+Mithril 的提供了处理路由的实用工具，以便我们：
 
--	defining a list of routes
--	programmatically redirecting between routes
--	making links in templates routed transparently and unobtrusively
+-	定义路由列表
+-	以编程方式处理路由跳转
+-	生成模板中的超链接：显式的或隐式的
 
----
+### 定义路由
 
-### Defining routes
+定义路由列表，您需要指定一个 host DOM 元素，一个默认路由和一个键值对映射，这个键值对包括路由定义和需要呈现的 [modules](mithril.mount.md)。注意：`module` 已经重命名为了 `mount`。相关文档也正在更新中。
 
-To define a list of routes, you need to specify a host DOM element, a default route and a key-value map of possible routes and respective [modules](mithril.mount.md) to be rendered. Note: `module` was renamed to `mount`. Documentation will be updated soon.
-
-The example below defines three routes, to be rendered in `<body>`. `home`, `login` and `dashboard` are modules. We'll see how to define a module in a bit.
+下面的例子定义了三个路由，呈现在 `<body>` 中。`home`, `login` 和 `dashboard` 是模块。我们将会看到如何定义一个模块。
 
 ```javascript
 m.route(document.body, "/", {
@@ -26,12 +24,12 @@ m.route(document.body, "/", {
 });
 ```
 
-Routes can take arguments, by prefixing words with a colon `:`.
+路由可以带参数，通过添加一个冒号 `:` 前缀。
 
-The example below shows a route that takes a `userID` parameter.
+下面的例子演示了一个带有 `userID` 参数的路由。
 
 ```javascript
-//a sample module
+// 模块
 var dashboard = {
 	controller: function() {
 		return {id: m.route.param("userID")};
@@ -42,71 +40,69 @@ var dashboard = {
 }
 
 //setup routes to start w/ the `#` symbol
+// 设置路由为 `#`
 m.route.mode = "hash";
 
-//define a route
+// 定义路由
 m.route(document.body, "/dashboard/johndoe", {
 	"/dashboard/:userID": dashboard
 });
 ```
 
-This redirects to the URL `http://server/#/dashboard/johndoe` and yields:
+访问 URL `http://server/#/dashboard/johndoe` 将得到：
 
 ```html
 <body>johndoe</body>
 ```
 
-Above, `dashboard` is a module. It contains `controller` and `view` properties. When the URL matches a route, the respective module's controller is instantiated and passed as a parameter to the view.
+上面示例中，`dashboard` 是一个模块。它包含 `controller` 和 `view` 属性。当 URL 和路由规则匹配时，模块的控制器将会实例化并作为参数传递给视图。
 
-In this case, since there's only one route, the app redirects to the default route `"/dashboard/johndoe"` and, under the hood, it calls `m.mount(document.body, dashboard)`.
+由于只有一个路由规则，应用重定向到默认路由 `"/dashboard/johndoe"` 然后调用 `m.mount(document.body, dashboard)`。
 
-The string `johndoe` is bound to the `:userID` parameter, which can be retrieved programmatically in the controller via `m.route.param("userID")`.
+字符串 `johndoe` 绑定到 `:userID` 参数，控制器通过 `m.route.param("userID")` 访问此参数。
 
-The `m.route.mode` property defines which URL portion is used to implement the routing mechanism. It should be set before any calls to `m.route`.  Its value can be set to either "search", "hash" or "pathname". The default value is "search".
+`m.route.mode` 属性定义了 URL 的哪个部分用来实现路由机制。它的值可以是 "search"、hash" 或 "pathname"，默认为 "search"。
 
--	`search` mode uses the querystring. This allows named anchors (i.e. `<a href="#top">Back to top</a>`, `<a name="top"></a>`) to work on the page, but routing changes causes page refreshes in IE8, due to its lack of support for `history.pushState`.
+-	`search` 模式使用查询字符串。这样超链接锚点(即 `<a href="#top">Back to top</a>`，`<a name="top"></a>`)可以在页面上正常工作,但在 IE8 上，路由的变化将导致页面刷新，因为 IE8 不支持 `history.pushState`。
 
 	Example URL: `http://server/?/path/to/page`
 
--	`hash` mode uses the hash. It's the only mode in which routing changes do not cause page refreshes in any browser. However, this mode does not support named anchors and browser history lists.
+-	`hash` 模式使用 `#`。这是唯一的路由变化不会导致任何浏览器刷新页面的机制。然而，这种模式不支持锚点和浏览器历史记录。
 
 	Example URL: `http://server/#/path/to/page`
 
--	`pathname` mode allows routing URLs that contain no special characters, however this mode requires server-side setup in order to support bookmarking and page refreshes. It also causes page refreshes in IE8.
-	
+- 	`pathname` 模式的路由的 URL 不能包含特殊字符，然而这种模式想要支持收藏夹和页面刷新，需要服务器端进行设置。 它也会导致 IE8 浏览器的页面刷新。
+
 	Example URL: `http://server/path/to/page`
 
-	The simplest server-side setup possible to support pathname mode is to serve the same content regardless of what URL is requested. In Apache, this URL rewriting can be achieved using [mod_rewrite](https://httpd.apache.org/docs/current/mod/mod_rewrite.html).
+	最简单的支持 pathname 模式的服务器端设置是不论 URL 请求是什么，都提供相同的内容。在 Apache 中，这可以通过使用 [mod_rewrite](https://httpd.apache.org/docs/current/mod/mod_rewrite.html) 模块来实现 URL 重写。
 
 
----
-
-### Redirecting
+### 重定向
 
 You can programmatically redirect to another page. Given the example in the "Defining Routes" section:
+
+您可以通过编程方式重定向到另一个页面。参考 “定义路由” 一节中的例子：
 
 ```javascript
 m.route("/dashboard/marysue");
 ```
 
-redirects to `http://server/#/dashboard/marysue`
+重定向到 `http://server/#/dashboard/marysue`
 
----
+### Mode abstraction 模式抽象
 
-### Mode abstraction
-
-This method is meant to be used with a virtual element's `config` attribute. For example:
+这种方法是：使用一个虚拟元素的 `config` 属性。例如:
 
 ```javascript
 //Note that the '#' is not required in `href`, thanks to the `config` setting.
+// 注意，由于使用了 `config`，因此 `href` 不需要包含 '#'
 m("a[href='/dashboard/alicesmith']", {config: m.route});
 ```
 
-This makes the href behave correctly regardless of which `m.route.mode` is selected. It's a good practice to always use the idiom above, instead of hardcoding `?` or `#` in the href attribute.
+这使得 href 的行为肯定是正确的，而不管 `m.route.mode` 定义了什么模式。这是一个很好的编程实践，我们应该使用上面的编程方式，而不是把 `?` 或 `#` 硬编码到 href 属性。
 
-See [`m()`](mithril.md) for more information on virtual elements.
-
----
+阅读 [`m()`](mithril.md) 可以了解关于虚拟元素的更多信息。
 
 ### Redrawing semantics of routing
 
