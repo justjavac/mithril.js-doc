@@ -9,7 +9,7 @@
 * [高级主题](content/advanced.md)
     * [自动重绘](content/auto-redrawing.md)
     * [与其它库集成](content/integration.md)
-    * [编译模板](content/optimizing-performance.md)
+    * [性能优化](content/optimizing-performance.md)
 * [杂项](content/misc.md)
     * [与其它 MVC 框架的差异](content/comparison.md)
     * [基准测试](content/benchmarks.md)
